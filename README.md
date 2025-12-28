@@ -25,7 +25,7 @@ The bot collects messages from a chat and generates a concise summary in **infor
 - Python 3.10+
 - Packages:
 ```bash
-pip install python-telegram-bot==20.5 openai
+pip install python-telegram-bot python-dotenv openai
 
 Set the .env like this:
 
