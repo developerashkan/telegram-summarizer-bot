@@ -1,6 +1,6 @@
 # Telegram Chat Summarizer Bot
 
-A Telegram bot that summarizes chat messages in **Persian** using OpenAI GPT-4.1.
+A Telegram bot that summarizes chat messages in **Persian** using Azure OpenAI GPT-4.1.
 
 The bot collects messages from a chat and generates a concise summary in **informal Persian**, mentioning opinions and decisions.
 
