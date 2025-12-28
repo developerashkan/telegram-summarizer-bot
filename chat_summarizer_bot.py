@@ -3,24 +3,34 @@ import logging
 from typing import List
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from openai import OpenAI
+from openai import AzureOpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_SUM_BOT_TOKEN")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL")
+AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION")
 
+# ✅ Correct env checks
 if not TELEGRAM_BOT_TOKEN:
     raise RuntimeError("TELEGRAM_SUM_BOT_TOKEN not set")
-if not OPENAI_API_KEY:
-    raise RuntimeError("OPENAI_API_KEY not set")
-if not OPENAI_BASE_URL:
-    raise RuntimeError("OPENAI_BASE_URL not set")
+if not AZURE_OPENAI_API_KEY:
+    raise RuntimeError("AZURE_OPENAI_API_KEY not set")
+if not AZURE_OPENAI_ENDPOINT:
+    raise RuntimeError("AZURE_OPENAI_ENDPOINT not set")
+if not AZURE_OPENAI_API_VERSION:
+    raise RuntimeError("AZURE_OPENAI_API_VERSION not set")
 
-client = OpenAI(
-    api_key=OPENAI_API_KEY,
-    base_url=OPENAI_BASE_URL,
+# ✅ Correct Azure client
+client = AzureOpenAI(
+    api_key=AZURE_OPENAI_API_KEY,
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_version=AZURE_OPENAI_API_VERSION,
 )
 
+# ⚠️ MUST be Azure DEPLOYMENT NAME
 MODEL = "gpt-4.1"
 
 logging.basicConfig(level=logging.INFO)
@@ -81,7 +91,7 @@ def summarize_chat(messages: List[dict], chat_name: str) -> str:
         return response.choices[0].message.content.strip()
 
     except Exception as e:
-        logger.error(e)
+        logger.error(f"Summarization error: {e}")
         return "Failed to summarize."
 
 
